@@ -1,0 +1,86 @@
+#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+struct Student {
+    string surname;
+    int id;
+    double rating;
+
+    void print() const {
+        cout << "Surname: " << surname << ", ID: " << id << ", Rating: " << rating << endl;
+    }
+};
+
+bool findStudent(stack<Student> s, const string& targetSurname) {
+    while (!s.empty()) {
+        if (s.top().surname == targetSurname) {
+            cout << "Student found:\n";
+            s.top().print();
+            return true;
+        }
+        s.pop();
+    }
+    cout << "Student with the surname '" << targetSurname << "' not found.\n";
+    return false;
+}
+
+void clearToSurname(stack<Student>& s, const string& targetSurname) {
+    stack<Student> temp;
+    bool found = false;
+
+    while (!s.empty()) {
+        if (s.top().surname == targetSurname) {
+            found = true;
+            s.pop(); //видалення цільового елементу
+            break;
+        }
+        s.pop();
+    }
+
+    if (found) {
+        cout << "Stack cleared to student with last name '" << targetSurname << "'.\n";
+    }
+    else {
+        cout << "Surname '" << targetSurname << "' not found on the stack.\n";
+    }
+}
+
+int main() {
+    stack<Student> studentStack;
+    int n;
+
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    for (int i = 0; i < n; ++i) {
+        Student s;
+        cout << "\nEnter data for student #" << i + 1 << ":\n";
+        cout << "Surname: ";
+        cin >> s.surname;
+        cout << "ID: ";
+        cin >> s.id;
+        cout << "Rating: ";
+        cin >> s.rating;
+        studentStack.push(s);
+    }
+
+    cout << "\nEnter the last name of the student you want to find: ";
+    string searchSurname;
+    cin >> searchSurname;
+    findStudent(studentStack, searchSurname);
+
+    cout << "\nEnter the surname to clear the stack: ";
+    string clearSurname;
+    cin >> clearSurname;
+    clearToSurname(studentStack, clearSurname);
+
+    cout << "\nRemaining students in the stack:\n";
+    while (!studentStack.empty()) {
+        studentStack.top().print();
+        studentStack.pop();
+    }
+
+    return 0;
+}
