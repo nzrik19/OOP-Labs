@@ -5,8 +5,8 @@ using namespace std;
 
 struct Student {
     string surname;
-    int id;
-    double rating;
+    int id{0};
+    double rating{0};
 
     void print() const {
         cout << "Surname: " << surname << ", ID: " << id << ", Rating: " << rating << endl;
