@@ -1,0 +1,45 @@
+#include <iostream>
+using namespace std;
+
+class Mammals {
+public:
+    virtual void description() const = 0; 
+    virtual ~Mammals() {}
+};
+
+class Animals : public Mammals {};
+
+class People : public Mammals {
+public:
+    void description() const override {
+        cout << "Humans are intelligent mammals capable of thinking and social interaction." << endl;
+    }
+};
+
+class Horses : public Animals {
+public:
+    void description() const override {
+        cout << "A horse is a strong and fast animal used for riding and work." << endl;
+    }
+};
+
+class Cows : public Animals {
+public:
+    void description() const override {
+        cout << "A cow is a domestic animal that produces milk and is used in agriculture." << endl;
+    }
+};
+
+int main() {
+    Mammals* mammals[] = { new People(), new Horses(), new Cows() };
+
+    for (Mammals* s : mammals) {
+        s->description();
+    }
+
+    for (Mammals* s : mammals) {
+        delete s;
+    }
+
+    return 0;
+}
