@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric> 
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter the number of array items: ";
+    cin >> n;
+
+    vector<int> arr(n);
+    cout << "Enter " << n << " integers:\n";
+    for (int& x : arr) {
+        cin >> x;
+    }
+
+    auto maxIt = max_element(arr.begin(), arr.end());
+    int maxIndex = distance(arr.begin(), maxIt);
+    cout << "\nIndex of maximum element: " << maxIndex << " (value = " << *maxIt << ")\n";
+
+    auto firstZero = find(arr.begin(), arr.end(), 0);
+    if (firstZero != arr.end()) {
+        auto secondZero = find(next(firstZero), arr.end(), 0);
+        if (secondZero != arr.end()) {
+            int product = accumulate(next(firstZero), secondZero, 1, multiplies<int>());
+            cout << "Product of elements between the first and second zeros: " << product << endl;
+        }
+        else {
+            cout << "The second zero is not found in the array.\n";
+        }
+    }
+    else {
+        cout << "The first zero is not found in the array.\n";
+    }
+
+
+    vector<int> oddPosElems, evenPosElems;
+
+    for (size_t i = 0; i < arr.size(); ++i) {
+        if (i % 2 == 0)
+            oddPosElems.push_back(arr[i]);  
+        else
+            evenPosElems.push_back(arr[i]);   
+    }
+
+    vector<int> transformed;
+    transformed.insert(transformed.end(), oddPosElems.begin(), oddPosElems.end());
+    transformed.insert(transformed.end(), evenPosElems.begin(), evenPosElems.end());
+
+    cout << "\nArray after conversion (odd -> first, even -> second):\n";
+    for (int x : transformed) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
