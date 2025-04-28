@@ -1,0 +1,94 @@
+using System;
+
+class DecimalCounter
+{
+    private static int counterInstances = 0;
+
+    private int currentValue;
+    private int minValue;
+    private int maxValue;
+
+    public static int InstancesCount => counterInstances;
+
+    public int CurrentValue
+    {
+        get { return currentValue; }
+    }
+
+    public DecimalCounter()
+    {
+        minValue = 0;
+        maxValue = 10;
+        currentValue = 11;
+        counterInstances++;
+    }
+
+    public DecimalCounter(int min, int max, int start)
+    {
+        if (min > max)
+            throw new ArgumentException("Minimum must be less than maximum.");
+        if (start < min || start > max)
+            throw new ArgumentOutOfRangeException("Start value must be within the range.");
+
+        minValue = min;
+        maxValue = max;
+        currentValue = start;
+        counterInstances++;
+    }
+
+    public void Increment()
+    {
+        if (currentValue < maxValue)
+            currentValue++;
+        else
+            currentValue=minValue;
+    }
+
+    public void Decrement()
+    {
+        if (currentValue > minValue)
+            currentValue--;
+        else
+            throw new InvalidOperationException("Value is below the minimum limit.");
+    }
+
+    public string GetStatus()
+    {
+        return $"Current: {currentValue}, Range: [{minValue}, {maxValue}]";
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            DecimalCounter counter1 = new DecimalCounter();
+            Console.WriteLine("Counter 1 (default):");
+            Console.WriteLine(counter1.GetStatus());
+
+            counter1.Increment();
+            Console.WriteLine("After increment: " + counter1.CurrentValue);
+
+            DecimalCounter counter2 = new DecimalCounter(1, 10, 5);
+            Console.WriteLine("\nCounter 2 (custom range):");
+            Console.WriteLine(counter2.GetStatus());
+
+            counter2.Decrement();
+            Console.WriteLine("After decrement: " + counter2.CurrentValue);
+
+            while (true)
+            {
+                counter2.Decrement();
+                Console.WriteLine("Decremented to: " + counter2.CurrentValue);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception caught: " + ex.Message);
+        }
+
+        Console.WriteLine("\nTotal counter instances: " + DecimalCounter.InstancesCount);
+    }
+}
