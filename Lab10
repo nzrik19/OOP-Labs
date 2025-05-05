@@ -1,0 +1,89 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        const int size = 8;
+        int[,] matrix = new int[size, size];
+        Random rand = new Random();
+
+        Console.WriteLine("Matrix:");
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                matrix[i, j] = rand.Next(-10, 11);
+                Console.Write(matrix[i, j].ToString().PadLeft(4));
+            }
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("\nFinding rows matching their corresponding columns:");
+
+        bool foundMatching = false;
+        for (int k = 0; k < size; k++)
+        {
+            bool isMatching = true;
+            for (int i = 0; i < size; i++)
+            {
+                if (matrix[k, i] != matrix[i, k])
+                {
+                    isMatching = false;
+                    break;
+                }
+            }
+
+            if (isMatching)
+            {
+                Console.WriteLine($"Row {k} matches Column {k}.");
+                foundMatching = true;
+            }
+        }
+        if (!foundMatching)
+        {
+            Console.WriteLine("No matching rows and columns found.");
+        }
+
+        Console.WriteLine("\nCalculating sums of rows containing at least one negative element:");
+        for (int i = 0; i < size; i++)
+        {
+            bool hasNegative = false;
+            int rowSum = 0;
+            for (int j = 0; j < size; j++)
+            {
+                if (matrix[i, j] < 0)
+                    hasNegative = true;
+                rowSum += matrix[i, j];
+            }
+
+            if (hasNegative)
+            {
+                Console.WriteLine($"Row {i} has at least one negative element. Sum = {rowSum}");
+            }
+        }
+        Console.WriteLine($"\nSum of main diagonal: {SumMainDiagonal(matrix)}");
+        Console.WriteLine($"Sum of anti-diagonal: {SumAntiDiagonal(matrix)}");
+    }
+
+    static int SumMainDiagonal(int[,] matrix)
+    {
+        int sum = 0;
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            sum += matrix[i, i];
+        }
+        return sum;
+    }
+
+    static int SumAntiDiagonal(int[,] matrix)
+    {
+        int sum = 0;
+        int size = matrix.GetLength(0);
+        for (int i = 0; i < size; i++)
+        {
+            sum += matrix[i, size - 1 - i];
+        }
+        return sum;
+    }
+}
